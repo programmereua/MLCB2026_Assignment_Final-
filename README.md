@@ -3,7 +3,6 @@
 
 An agentic AI tool for in silico gene perturbation across diseases, powered by spatial transcriptomics, causal discovery, and a Fireworks LLM backend.
 
-Built for the AMD Developer Hackathon Act II, Track 3 (Unicorn).
 
 
 ## The product
