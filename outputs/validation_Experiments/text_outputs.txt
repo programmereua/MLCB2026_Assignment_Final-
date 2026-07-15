@@ -1,0 +1,643 @@
+----- cell 01 -----
+NumPy version: 1.26.4
+Pandas version: 2.2.2
+Scanpy version: 1.10.2
+Anndata version: 0.10.8
+Libraries successfully imported and versions displayed!
+
+
+----- cell 02 -----
+setup done
+
+
+----- cell 03 -----
+GPU detected: NVIDIA A100-SXM4-80GB
+
+
+----- cell 04 -----
+<IPython.core.display.HTML object>
+
+----- cell 04 -----
+Saving handoff_to_eva.zip to handoff_to_eva.zip
+extracted: handoff_to_eva.zip -> /content/celcomen_data
+
+done — the notebook's file resolver (_find) will locate these automatically wherever they landed.
+
+
+----- cell 05 -----
+device: cuda | torch_geometric: True
+
+
+----- cell 06 -----
+config ready | sections ['HM11', 'T11'] | seed 0 | threshold 0.15
+
+
+----- cell 07 -----
+found    celcomen_data/handoff_to_eva/data/IU_PDA_HM11.h5ad
+found    celcomen_data/handoff_to_eva/drivers/HM11_drivers_per_CC.csv
+found    celcomen_data/handoff_to_eva/data/IU_PDA_T11.h5ad
+found    celcomen_data/handoff_to_eva/drivers/T11_drivers_per_CC.csv
+
+all files present - Run All
+
+
+----- cell 08 -----
+backbone helpers defined
+
+
+----- cell 09 -----
+log_shape ready
+
+
+----- cell 10 -----
+loaded: {'HM11': (3921, 117), 'T11': (2768, 117)}
+
+
+----- cell 11 -----
+[HM11]  (metastasis)
+shape | expr (spots, genes)            = (3921, 117)
+shape | edges (2, n_edges)             = (2, 23526)
+shape | spatial coords (spots, 2)      = (3921, 2)
+        n_genes=117  fibrotic_genes=26  tumour_genes=29  driver_rows=325
+
+[T11]  (primary)
+shape | expr (spots, genes)            = (2768, 117)
+shape | edges (2, n_edges)             = (2, 16608)
+shape | spatial coords (spots, 2)      = (2768, 2)
+        n_genes=117  fibrotic_genes=91  tumour_genes=26  driver_rows=175
+
+
+
+----- cell 12 -----
+
+=== HM11 (metastasis) ===
+
+
+----- cell 12 -----
+100%|██████████| 200/200 [00:03<00:00, 59.00it/s]
+
+
+----- cell 12 -----
+  faithful offdiag_dens=0.001  CROSS_dens=0.000  CROSS_mean=+0.0000
+
+
+----- cell 12 -----
+100%|██████████| 200/200 [00:02<00:00, 76.23it/s]
+
+
+----- cell 12 -----
+  signed   offdiag_dens=0.991  CROSS_dens=1.000  CROSS_mean=-0.0144
+
+
+----- cell 12 -----
+100%|██████████| 200/200 [00:01<00:00, 117.15it/s]
+
+
+----- cell 12 -----
+  sparse   offdiag_dens=0.644  CROSS_dens=0.668  CROSS_mean=-0.0100
+
+=== T11 (primary) ===
+
+
+----- cell 12 -----
+100%|██████████| 200/200 [00:02<00:00, 80.87it/s]
+
+
+----- cell 12 -----
+  faithful offdiag_dens=0.000  CROSS_dens=0.000  CROSS_mean=+0.0000
+
+
+----- cell 12 -----
+100%|██████████| 200/200 [00:02<00:00, 79.40it/s]
+
+
+----- cell 12 -----
+  signed   offdiag_dens=0.991  CROSS_dens=1.000  CROSS_mean=-0.0053
+
+
+----- cell 12 -----
+100%|██████████| 200/200 [00:01<00:00, 147.57it/s]
+
+----- cell 12 -----
+  sparse   offdiag_dens=0.644  CROSS_dens=0.660  CROSS_mean=-0.0058
+
+saved g2g_block_structure.csv
+
+
+----- cell 12 -----
+
+
+
+----- cell 13 -----
+shape | coupling W[HM11] (genes, genes) = (117, 117)   cross block = 26 x 29
+shape | coupling W[T11] (genes, genes) = (117, 117)   cross block = 91 x 26
+
+
+----- cell 14 -----
+states ready (model + baseline cached for both sections)
+
+
+----- cell 15 -----
+shape | baseline[HM11] (spots, genes)  = (3921, 117)
+shape | baseline[T11] (spots, genes)   = (2768, 117)
+
+
+----- cell 16 -----
+<Figure size 1100x500 with 3 Axes>
+
+----- cell 16 -----
+<Figure size 1100x500 with 3 Axes>
+
+----- cell 16 -----
+saved G2G heatmaps
+
+
+----- cell 17 -----
+propagation test on HM11 (faithful vs signed vs sparse):
+
+
+----- cell 17 -----
+100%|██████████| 200/200 [00:02<00:00, 78.41it/s]
+100%|██████████| 200/200 [00:02<00:00, 75.69it/s]
+
+
+----- cell 17 -----
+  faithful driverΔ=+0.000007  randomΔ=+0.000015  (~null)
+  signed   driverΔ=-0.000708  randomΔ=-0.000141  (effect present)
+  sparse   driverΔ=-0.000878  randomΔ=-0.000479  (effect present)
+saved propagation_null.csv
+
+
+----- cell 18 -----
+[V1] round-trip corr = 0.9985 (faithful)
+[V2] KO gene at source: 0.1262 -> 0.0144 (registers)
+[V3] effect vs hop distance:
+     hop 0: n= 587 mean_effect=0.003925
+     hop 1: n=1061 mean_effect=0.001911
+     hop 2: n= 728 mean_effect=0.001948
+     hop 3: n= 451 mean_effect=0.001959
+     (large at source, collapses by hop 1 at the gene level)
+
+
+----- cell 18 -----
+100%|██████████| 200/200 [00:01<00:00, 196.63it/s]
+
+----- cell 18 -----
+[V4] signed round-trip: sign-agreement=0.93 (negatives 0.75 over 4 antagonistic pairs) | Spearman rho=+0.48  (signs recovered)
+
+
+----- cell 18 -----
+
+
+
+----- cell 19 -----
+
+--- HM11 niche knockout scan ---
+  CC4   tumourΔ=-0.000878 down=0.66 drivers=VIM,TIMP1,IGFBP7,CCN2,DCN
+  CC6   tumourΔ=-0.000128 down=0.55 drivers=IGKC,JCHAIN,IGHA1,C7,VIM
+  CC8   tumourΔ=-0.000573 down=0.59 drivers=AEBP1,IGFBP3,CCN2,IGFBP7,SPARC
+  CC9   tumourΔ=-0.000107 down=0.66 drivers=C7,VIM,DCN,TIMP1,COL6A2
+  CC11  tumourΔ=-0.000068 down=0.59 drivers=CCN2,AEBP1,SPARC,THBS2,COL10A1
+  >> strongest fibrotic niche: CC4
+
+--- T11 niche knockout scan ---
+  CC4   tumourΔ=-0.000083 down=0.81 drivers=DES,ACTA2,FLNA,SOD3,ACTG2
+  CC5   tumourΔ=-0.001675 down=0.96 drivers=COL3A1,COL1A2,DCN,COL1A1,CCN2
+  CC8   tumourΔ=-0.001004 down=0.73 drivers=POSTN,IGFBP5,LCN2,PPDPF,C19orf33
+  CC11  tumourΔ=-0.000579 down=0.50 drivers=TPM2,ACTA2,FBXO32,DES,FLNA
+  CC14  tumourΔ=+0.000494 down=0.85 drivers=S100A6,ELF3,KRT8,MUC1,PRR15L
+  >> strongest fibrotic niche: CC5
+
+saved niche_knockout.csv
+
+
+----- cell 20 -----
+
+--- HM11 control battery (niche CC4) ---
+
+
+----- cell 20 -----
+100%|██████████| 200/200 [00:01<00:00, 134.20it/s]
+
+
+----- cell 20 -----
+  real               = -0.000878
+  random_gene_mean   = -0.000050
+  random_niche_mean  = -0.007665
+  shuffled_graph     = -0.000865
+  shuffled_labels    = -0.000104
+  specificity (real/random) = 17.43 (passes (>1.5))
+
+--- T11 control battery (niche CC5) ---
+
+
+----- cell 20 -----
+100%|██████████| 200/200 [00:01<00:00, 138.27it/s]
+
+
+----- cell 20 -----
+  real               = -0.001675
+  random_gene_mean   = -0.000191
+  random_niche_mean  = -0.006009
+  shuffled_graph     = -0.001670
+  shuffled_labels    = -0.000406
+  specificity (real/random) = 8.78 (passes (>1.5))
+
+saved controls.csv
+
+
+----- cell 21 -----
+  HM11 dose=0.00 (KO       ) tumourΔ=-0.000878
+  HM11 dose=0.25 (knockdown) tumourΔ=-0.000638
+  HM11 dose=0.50 (knockdown) tumourΔ=-0.000410
+  HM11 dose=0.75 (knockdown) tumourΔ=-0.000197
+  HM11 dose=1.00 (baseline ) tumourΔ=-0.000001
+  HM11 dose=1.50 (overexpr ) tumourΔ=+0.000336
+  HM11 dose=2.00 (overexpr ) tumourΔ=+0.000604
+  T11 dose=0.00 (KO       ) tumourΔ=-0.001675
+  T11 dose=0.25 (knockdown) tumourΔ=-0.001156
+  T11 dose=0.50 (knockdown) tumourΔ=-0.000703
+  T11 dose=0.75 (knockdown) tumourΔ=-0.000319
+  T11 dose=1.00 (baseline ) tumourΔ=+0.000001
+  T11 dose=1.50 (overexpr ) tumourΔ=+0.000466
+  T11 dose=2.00 (overexpr ) tumourΔ=+0.000747
+saved dose_response.csv
+
+
+----- cell 22 -----
+
+--- HM11 CC4: full decrease_score=+0.000878 ---
+  leave out VIM      -> contribution=+0.000023
+  leave out TIMP1    -> contribution=+0.000313
+  leave out IGFBP7   -> contribution=+0.000197
+  leave out CCN2     -> contribution=+0.000206
+  leave out DCN      -> contribution=+0.000178
+
+--- T11 CC5: full decrease_score=+0.001675 ---
+  leave out COL3A1   -> contribution=+0.000393
+  leave out COL1A2   -> contribution=+0.000415
+  leave out DCN      -> contribution=+0.000345
+  leave out COL1A1   -> contribution=+0.000385
+  leave out CCN2     -> contribution=+0.000243
+
+saved leave_one_out.csv
+
+
+----- cell 23 -----
+  HM11: KO ['CCN2', 'SPARC', 'DCN', 'TIMP1', 'IGFBP7'] in 1751 fibrotic spots
+  T11: KO ['CCN2', 'SPARC', 'DCN', 'TIMP1', 'IGFBP7'] in 2583 fibrotic spots
+
+(pooled-stroma KO; coarser than per-niche) top differential genes:
+  gene  T11_primary_delta  HM11_met_delta  difference_met_minus_primary
+  SLPI           0.012231        0.004401                     -0.007829
+  PLS1           0.012066        0.004424                     -0.007641
+SPINT2           0.010447        0.004139                     -0.006308
+    gene  T11_primary_delta  HM11_met_delta  difference_met_minus_primary
+LGALS3BP          -0.018148       -0.009153                      0.008994
+    ELF3          -0.018653       -0.008309                      0.010344
+   ABCC3          -0.037016       -0.016778                      0.020238
+
+
+----- cell 24 -----
+  HM11: stroma→tumour=-0.004536 tumour→stroma=-0.001644 | raw=2.8 per-driver=2.8 (sizes fib=1751 tum=714) -> larger fibrotic-to-tumour response
+  T11: stroma→tumour=-0.013523 tumour→stroma=-0.000129 | raw=104.9 per-driver=33.4 (sizes fib=2583 tum=185) -> larger fibrotic-to-tumour response
+saved bidirectional.csv  (interpret direction + gradient, not absolute magnitude)
+
+
+----- cell 25 -----
+  HM11 (CC4): interface n=316 deep n=268 | slope interface=+0.00085 deep=+0.00090 (similar)
+  T11 (CC5): interface n=43 deep n=127 | slope interface=+0.00169 deep=+0.00167 (similar)
+saved spatial_dose.csv
+
+
+----- cell 26 -----
+100%|██████████| 200/200 [00:01<00:00, 136.13it/s]
+
+
+----- cell 26 -----
+  seed 0 HM11: top=CC4 decrease_score=+0.000878 spec=2.91 signflip=True
+
+
+----- cell 26 -----
+100%|██████████| 200/200 [00:01<00:00, 145.58it/s]
+
+
+----- cell 26 -----
+  seed 0 T11: top=CC5 decrease_score=+0.001675 spec=6.26 signflip=True
+
+
+----- cell 26 -----
+100%|██████████| 200/200 [00:01<00:00, 132.94it/s]
+
+
+----- cell 26 -----
+  seed 1 HM11: top=CC8 decrease_score=+0.001130 spec=3.36 signflip=True
+
+
+----- cell 26 -----
+100%|██████████| 200/200 [00:01<00:00, 143.47it/s]
+
+
+----- cell 26 -----
+  seed 1 T11: top=CC8 decrease_score=+0.001549 spec=3.28 signflip=True
+
+
+----- cell 26 -----
+100%|██████████| 200/200 [00:01<00:00, 134.06it/s]
+
+
+----- cell 26 -----
+  seed 2 HM11: top=CC4 decrease_score=+0.001053 spec=17.86 signflip=True
+
+
+----- cell 26 -----
+100%|██████████| 200/200 [00:01<00:00, 146.68it/s]
+
+
+----- cell 26 -----
+  seed 2 T11: top=CC5 decrease_score=+0.001519 spec=7.52 signflip=True
+
+HM11: top niche VARIES (CC4); decrease_score=+0.001020±0.000129; spec=8.04; dose sign-flip all seeds=True
+
+T11: top niche VARIES (CC5); decrease_score=+0.001581±0.000083; spec=5.69; dose sign-flip all seeds=True
+
+
+----- cell 26 -----
+<Figure size 1200x420 with 2 Axes>
+
+----- cell 26 -----
+
+saved robustness_per_seed.csv, robustness_summary.csv, robustness_dose_curves.png
+
+
+----- cell 27 -----
+100%|██████████| 200/200 [00:01<00:00, 132.93it/s]
+
+
+----- cell 27 -----
+  seed0 HM11 CC4+CC8: obs=+0.00235 exp=+0.00145 syn=+0.00090 -> positive non-additivity
+  seed0 HM11 CC4+CC6: obs=+0.00174 exp=+0.00101 syn=+0.00073 -> positive non-additivity
+  seed0 HM11 CC8+CC6: obs=+0.00132 exp=+0.00070 syn=+0.00062 -> positive non-additivity
+
+
+----- cell 27 -----
+100%|██████████| 200/200 [00:01<00:00, 144.50it/s]
+
+
+----- cell 27 -----
+  seed0 T11 CC5+CC8: obs=+0.00596 exp=+0.00268 syn=+0.00328 -> positive non-additivity
+  seed0 T11 CC5+CC11: obs=+0.00536 exp=+0.00225 syn=+0.00311 -> positive non-additivity
+  seed0 T11 CC8+CC11: obs=+0.00361 exp=+0.00158 syn=+0.00203 -> positive non-additivity
+
+
+----- cell 27 -----
+100%|██████████| 200/200 [00:01<00:00, 132.55it/s]
+
+
+----- cell 27 -----
+  seed1 HM11 CC8+CC4: obs=+0.00361 exp=+0.00210 syn=+0.00151 -> positive non-additivity
+  seed1 HM11 CC8+CC11: obs=+0.00137 exp=+0.00129 syn=+0.00008 -> additive
+  seed1 HM11 CC4+CC11: obs=+0.00195 exp=+0.00113 syn=+0.00081 -> positive non-additivity
+
+
+----- cell 27 -----
+100%|██████████| 200/200 [00:01<00:00, 138.81it/s]
+
+
+----- cell 27 -----
+  seed1 T11 CC8+CC5: obs=+0.00549 exp=+0.00266 syn=+0.00283 -> positive non-additivity
+  seed1 T11 CC8+CC11: obs=+0.00487 exp=+0.00229 syn=+0.00258 -> positive non-additivity
+  seed1 T11 CC5+CC11: obs=+0.00429 exp=+0.00185 syn=+0.00244 -> positive non-additivity
+
+
+----- cell 27 -----
+100%|██████████| 200/200 [00:01<00:00, 119.73it/s]
+
+
+----- cell 27 -----
+  seed2 HM11 CC4+CC8: obs=+0.00328 exp=+0.00189 syn=+0.00139 -> positive non-additivity
+  seed2 HM11 CC4+CC6: obs=+0.00172 exp=+0.00124 syn=+0.00048 -> positive non-additivity
+  seed2 HM11 CC8+CC6: obs=+0.00190 exp=+0.00102 syn=+0.00088 -> positive non-additivity
+
+
+----- cell 27 -----
+100%|██████████| 200/200 [00:01<00:00, 143.00it/s]
+
+
+----- cell 27 -----
+  seed2 T11 CC5+CC8: obs=+0.00605 exp=+0.00275 syn=+0.00330 -> positive non-additivity
+  seed2 T11 CC5+CC4: obs=+0.00236 exp=+0.00162 syn=+0.00074 -> positive non-additivity
+  seed2 T11 CC8+CC4: obs=+0.00268 exp=+0.00134 syn=+0.00134 -> positive non-additivity
+
+combined-niche non-additivity summary across seeds:
+section niche_A niche_B  mean_nonadditivity  sd_nonadditivity  mean_observed  mean_expected  label_mode
+   HM11     CC4    CC11      0.000814         NaN       0.001948       0.001134 positive non-additivity
+   HM11     CC4     CC6      0.000605    0.000176       0.001730       0.001124 positive non-additivity
+   HM11     CC4     CC8      0.001146    0.000350       0.002816       0.001670 positive non-additivity
+   HM11     CC8    CC11      0.000078         NaN       0.001372       0.001294    additive
+   HM11     CC8     CC4      0.001508         NaN       0.003607       0.002100 positive non-additivity
+   HM11     CC8     CC6      0.000750    0.000185       0.001612       0.000863 positive non-additivity
+    T11     CC5    CC11      0.002774    0.000470       0.004826       0.002052 positive non-additivity
+    T11     CC5     CC4      0.000736         NaN       0.002360       0.001624 positive non-additivity
+    T11     CC5     CC8      0.003288    0.000016       0.006004       0.002716 positive non-additivity
+    T11     CC8    CC11      0.002306    0.000392       0.004241       0.001936 positive non-additivity
+    T11     CC8     CC4      0.001341         NaN       0.002679       0.001339 positive non-additivity
+    T11     CC8     CC5      0.002826         NaN       0.005487       0.002660 positive non-additivity
+
+
+----- cell 27 -----
+<Figure size 1200x400 with 2 Axes>
+
+----- cell 27 -----
+saved combined-niche non-additivity outputs
+
+
+----- cell 28 -----
+<Figure size 986x500 with 2 Axes>
+
+----- cell 28 -----
+<Figure size 2200x540 with 7 Axes>
+
+----- cell 28 -----
+<Figure size 884x500 with 2 Axes>
+
+----- cell 28 -----
+<Figure size 2200x540 with 7 Axes>
+
+----- cell 28 -----
+<Figure size 700x450 with 1 Axes>
+
+----- cell 28 -----
+<Figure size 1300x400 with 2 Axes>
+
+----- cell 28 -----
+saved all figures
+
+
+----- cell 29 -----
+shape | coupling W[HM11] (genes, genes) = (117, 117)
+[HM11]  intra fibrotic -0.0089 | intra tumour +0.0065 | INTER cross -0.0100 (density 0.67)
+       inter in negative tail 0.05  binomial p 3.1e-01  |  permutation p 0.4320 (null mean -0.0077)
+
+shape | coupling W[T11] (genes, genes) = (117, 117)
+[T11]  intra fibrotic -0.0077 | intra tumour +0.0098 | INTER cross -0.0058 (density 0.66)
+       inter in negative tail 0.05  binomial p 3.8e-01  |  permutation p 0.5150 (null mean -0.0061)
+
+saved signed_intra_vs_inter_both_sections.csv
+
+
+----- cell 30 -----
+100%|██████████| 200/200 [00:02<00:00, 78.21it/s]
+100%|██████████| 200/200 [00:02<00:00, 78.82it/s]
+100%|██████████| 200/200 [00:01<00:00, 132.54it/s]
+
+----- cell 30 -----
+trained faithful/signed/sparse (one seed)
+
+
+----- cell 30 -----
+
+
+
+----- cell 31 -----
+shape | expr (spots, genes)            = (3921, 117)
+shape | edges (2, n_edges)             = (2, 23526)
+shape | coupling W[faithful] (genes, genes) = (117, 117)
+shape | coupling W[signed] (genes, genes) = (117, 117)
+shape | coupling W[sparse] (genes, genes) = (117, 117)
+n_genes=117  fibrotic=26  tumour=29
+
+
+----- cell 32 -----
+CHOICE: sphere-normalise expression | round-trip corr=0.9985 | VERDICT: PASS
+
+
+----- cell 33 -----
+CHOICE: initial_downscale()+relax() | source expr 0.1262 -> 0.0144 | VERDICT: PASS
+
+
+----- cell 34 -----
+  faithful  cross_density=0.000 cross_mean=+0.0000
+  signed    cross_density=1.000 cross_mean=-0.0144
+  sparse    cross_density=0.668 cross_mean=-0.0101
+
+CHOICE: signed (not faithful) | faithful cross_density=0.000 (empty) | signed cross real=-0.0144 vs null=-0.0080 z=-0.53 perm p=0.2990 | VERDICT: FAIL
+
+
+----- cell 35 -----
+n_drivers=26  n_random_sets=6 (size-matched)  n_tumour_genes=29
+  keep=0.15: driverD=-0.012469 randomD=-0.002796 specificity=4.46x
+  keep=0.30: driverD=-0.011652 randomD=-0.000015 specificity=762.59x
+  keep=0.45: driverD=-0.014093 randomD=-0.002353 specificity=5.99x
+  keep=0.65: driverD=-0.013095 randomD=-0.001776 specificity=7.37x
+  keep=0.85: driverD=-0.013394 randomD=-0.001593 specificity=8.41x
+
+SENSITIVITY: largest nominal specificity at keep=0.3 (specificity=762.59x) | current 0.65 -> 7.37x
+
+
+----- cell 36 -----
+100%|██████████| 200/200 [00:01<00:00, 178.67it/s]
+
+----- cell 36 -----
+CHOICE: signed extension recovers signs | sign_agreement=0.88 (binom p=0.0000) | negatives=0.91 over 32 pairs (binom p=0.0000) | Spearman=+0.81 | VERDICT: PASS
+
+
+----- cell 36 -----
+
+
+
+----- cell 37 -----
+  hop 0: n= 587 mean_effect=0.003925
+  hop 1: n=1061 mean_effect=0.001912
+  hop 2: n= 728 mean_effect=0.001949
+  hop 3: n= 451 mean_effect=0.001960
+
+CHOICE/READOUT: propagation locality | effect stays flat past hop 1 | GLOBAL (report as limitation)
+
+
+----- cell 38 -----
+shuffled_graph (SAME model, edges shuffled) = -0.000866  vs reference = -0.000879
+  -> ratio shuffled/real = 0.99  (still ~real => effect NOT spatially dependent (mean-field))
+
+random_niche audit (non-fibrotic niches used as controls):
+     niche            theme  n_spots tumour_overlap flag
+      CC10 immunosuppressive       80              0  
+      CC12 tumour/metabolic      393            393  TUMOUR-CONTAMINATED IS-TUMOUR-NICHE 
+      CC15 tumour/metabolic      100            100  TUMOUR-CONTAMINATED IS-TUMOUR-NICHE 
+      CC17 tumour/metabolic      221            221  TUMOUR-CONTAMINATED IS-TUMOUR-NICHE 
+
+(fibrotic source niche has n_spots=587)
+
+VERDICT: CAVEAT: random_niche control is unfair — IS-TUMOUR-NICHE, TUMOUR-CONTAMINATED
+
+
+----- cell 39 -----
+100%|██████████| 200/200 [00:02<00:00, 75.81it/s]
+100%|██████████| 200/200 [00:01<00:00, 185.22it/s]
+
+
+----- cell 39 -----
+  seed 0: cross_mean=-0.01439 (perm p=0.2920) | sign_agreement=0.88 (binom p=0.0000, 32 neg pairs)
+
+
+----- cell 39 -----
+100%|██████████| 200/200 [00:02<00:00, 75.41it/s]
+100%|██████████| 200/200 [00:01<00:00, 183.70it/s]
+
+
+----- cell 39 -----
+  seed 1: cross_mean=-0.01097 (perm p=0.3930) | sign_agreement=0.48 (binom p=0.6439, 36 neg pairs)
+
+
+----- cell 39 -----
+100%|██████████| 200/200 [00:02<00:00, 75.24it/s]
+100%|██████████| 200/200 [00:01<00:00, 183.55it/s]
+
+----- cell 39 -----
+  seed 2: cross_mean=-0.02254 (perm p=0.0970) | sign_agreement=0.62 (binom p=0.0320, 36 neg pairs)
+
+across 3 seeds:  cross_mean = -0.01597 ± 0.00594  |  sign_agreement = 0.66 ± 0.20
+VERDICT: cross-block mean negative in all runs; significance and pair-level recovery vary
+
+
+----- cell 39 -----
+
+
+
+----- cell 40 -----
+                                 check                                         stat                       verdict
+             1 spherical normalization                            round-trip=0.9985                          PASS
+                        2 source downscaling registers                               0.1262->0.0144                          PASS
+3 cross-block permutation test                       perm p=0.2990, z=-0.53                          FAIL
+                  4 SPARSE_KEEP choice                      largest nominal ratio at keep=0.3 (762.59x)                          INFO
+            5 sign recovery (binomial)    agree=0.88 p=0.0000, neg=32pairs p=0.0000                          PASS
+                6 propagation locality                               flat past hop1 GLOBAL (report as limitation)
+           7 control battery diagnosis  shuffled/reference=0.99; contaminated_niches=3/4                        CAVEAT
+             8 robustness across seeds cross=-0.01597±0.00594, sign_agree=0.66±0.20                        CAVEAT
+
+saved design_checks_summary.csv (+ per-check CSVs)
+
+
+----- cell 41 -----
+100%|██████████| 200/200 [00:02<00:00, 77.36it/s]
+
+
+----- cell 41 -----
+[HM11] cross-block real=-0.01437  null=-0.00793  z=-0.53  perm p=0.2990  -> compatible with random-partition null
+
+
+----- cell 41 -----
+100%|██████████| 200/200 [00:02<00:00, 79.48it/s]
+
+
+----- cell 41 -----
+[T11] cross-block real=-0.00528  null=-0.00638  z=+0.20  perm p=0.5770  -> compatible with random-partition null
+
+
+----- cell 41 -----
+<Figure size 1200x420 with 2 Axes>
+
+----- cell 41 -----
+
+saved signed_signal_permutation.csv, signed_signal_sweep.csv, signed_signal_check.png
+

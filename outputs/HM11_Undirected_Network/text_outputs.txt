@@ -1,0 +1,22 @@
+----- cell 02 -----
+Genes: 117
+W shape: (117, 117)
+Symmetric: True
+
+
+----- cell 03 -----
+Genes with theme information: 186
+
+
+----- cell 04 -----
+Panel: raw | 60 strongest undirected edges (29 supportive, 31 antagonistic)
+Weight range: [-1.000, +0.999]
+Saved: celcomen_undirected_network_HM11_edges.csv
+
+
+----- cell 05 -----
+<Figure size 1200x1000 with 1 Axes>
+
+----- cell 05 -----
+Saved: celcomen_undirected_network_HM11.png (68 genes shown)
+

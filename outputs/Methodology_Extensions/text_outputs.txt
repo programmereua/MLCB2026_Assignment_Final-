@@ -1,0 +1,365 @@
+----- cell 01 -----
+Drive already mounted
+
+handoff_to_eva ready: True
+
+no previous celcomen_complete_3seed_outputs found; every model will compute fresh
+
+outputs will also be mirrored to /content/drive/MyDrive/celcomen_complete_3seed_outputs as they are produced
+
+
+----- cell 02 -----
+GPU attached: NVIDIA A100-SXM4-40GB
+A100 confirmed, proceeding.
+device = 'cuda' will be used for every model below
+
+
+----- cell 03 -----
+setup done
+
+
+----- cell 04 -----
+numpy/scipy/anndata/scanpy were already reinstalled and the runtime already
+restarted in this session. Skipping the reinstall and continuing.
+
+
+----- cell 06 -----
+device: cuda | torch_geometric: True
+log_shape ready
+
+
+----- cell 07 -----
+config ready | sections ['HM11', 'T11'] | seed 0 | threshold 0.15
+
+
+----- cell 08 -----
+found handoff_to_eva/data/IU_PDA_HM11.h5ad
+found handoff_to_eva/drivers/HM11_drivers_per_CC.csv
+found handoff_to_eva/data/IU_PDA_T11.h5ad
+found handoff_to_eva/drivers/T11_drivers_per_CC.csv
+
+all files present
+
+
+----- cell 09 -----
+backbone helpers defined | perturbation = initial programme downscaling followed by relaxation
+
+
+----- cell 10 -----
+loaded: {'HM11': (3921, 117), 'T11': (2768, 117)}
+
+
+----- cell 11 -----
+[HM11] (metastasis)
+shape | expr (spots, genes)            = (3921, 117)
+shape | edges (2, n_edges)             = (2, 23526)
+shape | spatial coords (spots, 2)      = (3921, 2)
+        n_genes=117  fibrotic_genes=26  tumour_genes=29
+
+[T11] (primary)
+shape | expr (spots, genes)            = (2768, 117)
+shape | edges (2, n_edges)             = (2, 16608)
+shape | spatial coords (spots, 2)      = (2768, 2)
+        n_genes=117  fibrotic_genes=91  tumour_genes=26
+
+
+
+----- cell 12 -----
+
+=== HM11 (metastasis) ===
+
+
+----- cell 12 -----
+100%|██████████| 200/200 [00:03<00:00, 53.95it/s]
+
+
+----- cell 12 -----
+  faithful offdiag_dens=0.001  CROSS_dens=0.000  CROSS_mean=+0.0000
+
+
+----- cell 12 -----
+100%|██████████| 200/200 [00:02<00:00, 69.92it/s]
+
+
+----- cell 12 -----
+  signed   offdiag_dens=0.991  CROSS_dens=1.000  CROSS_mean=-0.0144
+
+
+----- cell 12 -----
+100%|██████████| 200/200 [00:02<00:00, 69.82it/s]
+
+
+----- cell 12 -----
+  sparse   offdiag_dens=0.654  CROSS_dens=0.670  CROSS_mean=-0.0102
+
+=== T11 (primary) ===
+
+
+----- cell 12 -----
+100%|██████████| 200/200 [00:02<00:00, 75.87it/s]
+
+
+----- cell 12 -----
+  faithful offdiag_dens=0.000  CROSS_dens=0.000  CROSS_mean=+0.0000
+
+
+----- cell 12 -----
+100%|██████████| 200/200 [00:02<00:00, 74.96it/s]
+
+
+----- cell 12 -----
+  signed   offdiag_dens=0.991  CROSS_dens=1.000  CROSS_mean=-0.0053
+
+
+----- cell 12 -----
+100%|██████████| 200/200 [00:02<00:00, 75.48it/s]
+
+----- cell 12 -----
+  sparse   offdiag_dens=0.655  CROSS_dens=0.673  CROSS_mean=-0.0059
+
+saved g2g_block_structure.csv
+
+
+----- cell 12 -----
+
+
+
+----- cell 13 -----
+states ready (model + baseline cached for both sections)
+
+
+----- cell 14 -----
+shape | baseline[HM11] (spots, genes)  = (3921, 117)
+shape | baseline[T11] (spots, genes)   = (2768, 117)
+
+
+----- cell 15 -----
+evaluation helpers ready
+edge convention: edges_of returns [receiver, sender]
+sender_receiver() decodes it; all Model 2 and Model 3 code uses that decoder
+  HM11: convention check PASSED
+
+
+----- cell 16 -----
+shape | coupling W[HM11] (genes, genes) = (117, 117)   cross block 26 x 29
+  HM11: cross density 0.670  cross mean -0.0102
+shape | coupling W[T11] (genes, genes) = (117, 117)   cross block 91 x 26
+  T11: cross density 0.673  cross mean -0.0059
+
+
+----- cell 17 -----
+100%|██████████| 200/200 [00:02<00:00, 70.43it/s]
+100%|██████████| 200/200 [00:02<00:00, 70.60it/s]
+100%|██████████| 200/200 [00:02<00:00, 73.43it/s]
+100%|██████████| 200/200 [00:02<00:00, 73.14it/s]
+
+----- cell 17 -----
+section  active_unique_offdiagonal_couplings  seed0_seed1_cross_block_correlation
+   HM11                                 4474                             0.022297
+    T11                                 4486                            -0.001608
+
+
+----- cell 17 -----
+
+
+
+----- cell 18 -----
+illustrative matched-size gene-set comparison on HM11:
+
+
+----- cell 18 -----
+100%|██████████| 200/200 [00:02<00:00, 71.28it/s]
+100%|██████████| 200/200 [00:02<00:00, 71.05it/s]
+
+
+----- cell 18 -----
+  faithful driver delta=+0.000007  random-set delta=+0.000015
+  signed   driver delta=-0.000708  random-set delta=-0.000141
+  sparse   driver delta=-0.000960  random-set delta=-0.000526
+saved illustrative_gene_set_comparison.csv
+
+
+----- cell 19 -----
+
+--- HM11 niche programme-downscaling scan ---
+  CC4   tumourΔ=-0.000960 down=0.66 drivers=VIM,TIMP1,IGFBP7,CCN2,DCN
+  CC6   tumourΔ=-0.000111 down=0.59 drivers=IGKC,JCHAIN,IGHA1,C7,VIM
+  CC8   tumourΔ=-0.000564 down=0.66 drivers=AEBP1,IGFBP3,CCN2,IGFBP7,SPARC
+  CC9   tumourΔ=-0.000123 down=0.66 drivers=C7,VIM,DCN,TIMP1,COL6A2
+  CC11  tumourΔ=-0.000063 down=0.59 drivers=CCN2,AEBP1,SPARC,THBS2,COL10A1
+  >> strongest fibrotic niche: CC4
+
+--- T11 niche programme-downscaling scan ---
+  CC4   tumourΔ=-0.000074 down=0.73 drivers=DES,ACTA2,FLNA,SOD3,ACTG2
+  CC5   tumourΔ=-0.001651 down=0.96 drivers=COL3A1,COL1A2,DCN,COL1A1,CCN2
+  CC8   tumourΔ=-0.000994 down=0.69 drivers=POSTN,IGFBP5,LCN2,PPDPF,C19orf33
+  CC11  tumourΔ=-0.000701 down=0.65 drivers=TPM2,ACTA2,FBXO32,DES,FLNA
+  CC14  tumourΔ=+0.000515 down=0.85 drivers=S100A6,ELF3,KRT8,MUC1,PRR15L
+  >> strongest fibrotic niche: CC5
+
+saved niche_programme_downscaling.csv
+
+
+----- cell 20 -----
+  HM11: GCN loc=0.98 | GAT driver loc=0.98 vs random loc=0.98 -> global (loc~1)
+  T11: GCN loc=1.02 | GAT driver loc=1.03 vs random loc=1.00 -> global (loc~1)
+saved gcn_vs_gat_localization.csv
+
+
+----- cell 21 -----
+Model 2: single-seed transductive spatial-block reconstruction
+section  seed                                              protocol  trainable_parameters  train_mse  heldout_mse  train_r2  heldout_r2  relative_mse_gap
+   HM11     0 single-seed transductive spatial-block reconstruction                 13106   0.735221     1.761331  0.264779   -0.266786          1.395648
+    T11     0 single-seed transductive spatial-block reconstruction                 13106   0.669569     2.075136  0.330430   -0.380951          2.099210
+
+
+----- cell 21 -----
+<Figure size 1000x340 with 2 Axes>
+
+----- cell 21 -----
+saved model2_gat_reconstruction_corrected.csv
+
+
+----- cell 22 -----
+
+--- HM11: constrained GGAT (fibrotic-only), niche CC4 ---
+  fibrotic to tumour GGAT fit R^2 = 0.148
+  uniform tumour delta = -0.000960
+  niche-attention tumour delta = -0.000890
+  tumour spots RECEIVING from the niche = 122
+
+--- T11: constrained GGAT (fibrotic-only), niche CC5 ---
+  fibrotic to tumour GGAT fit R^2 = 0.479
+  uniform tumour delta = -0.001651
+  niche-attention tumour delta = -0.001673
+  tumour spots RECEIVING from the niche = 12
+
+Model 3: constrained GGAT, corrected sender to receiver orientation
+section  seed niche  ggat_r2  uniform_delta  attention_delta  tumour_spots_receiving_from_niche
+   HM11     0   CC4    0.148      -0.000960        -0.000890                                122
+    T11     0   CC5    0.479      -0.001651        -0.001673                                 12
+saved model3_ggat_corrected.csv
+
+
+----- cell 23 -----
+Model 3: single-seed transductive spatial-block reconstruction
+section  seed                                              protocol  trainable_parameters  train_mse  heldout_mse  train_r2  heldout_r2  relative_mse_gap
+   HM11     0 single-seed transductive spatial-block reconstruction                   513   0.811040     1.513610  0.188959   -0.377766          0.866257
+    T11     0 single-seed transductive spatial-block reconstruction                   513   0.650099     0.739787  0.349901   -0.097301          0.137960
+
+
+----- cell 23 -----
+<Figure size 1000x340 with 2 Axes>
+
+----- cell 23 -----
+saved model3_ggat_reconstruction_corrected.csv
+
+
+----- cell 24 -----
+Device: cuda
+Seed: 0
+K: 6
+Output: /content/celcomen_complete_3seed_outputs/model4_constant_mass_attention
+Preprocessing: CPM(1e+06) + log1p + row-L2
+
+
+----- cell 25 -----
+HM11: expression=(3921, 117), fibrotic genes=26, tumour genes=29
+T11: expression=(2768, 117), fibrotic genes=91, tumour genes=26
+
+
+----- cell 26 -----
+HM11: 3,921 receivers, 23,526 edges, K=6
+T11: 2,768 receivers, 16,608 edges, K=6
+
+
+----- cell 28 -----
+    model  row_mass_min  row_mass_max  row_mass_std  trainable_parameters  all_gradients_finite
+  uniform      6.000000           6.0  0.000000e+00                   162                  True
+attention      5.999999           6.0  3.110543e-07                   738                  True
+Synthetic implementation audit passed.
+
+
+----- cell 29 -----
+
+Training HM11, seed=0
+
+Training T11, seed=0
+section     model  seed  trainable_parameters  active_unique_W_edges  active_unique_U_edges  final_loss_per_spot
+   HM11   uniform     0                 27378                   1018                   1018            -0.652355
+   HM11 attention     0                 34866                   1018                   1018            -0.694190
+    T11   uniform     0                 27378                   1018                   1018            -0.544391
+    T11 attention     0                 34866                   1018                   1018            -0.602479
+
+
+----- cell 29 -----
+<Figure size 600x350 with 1 Axes>
+
+----- cell 29 -----
+<Figure size 600x350 with 1 Axes>
+
+----- cell 30 -----
+section     model  seed  row_mass_min  row_mass_max  row_mass_std  column_mass_mean  column_mass_std  trainable_parameters                                statement
+   HM11   uniform     0      6.000000      6.000000  0.000000e+00               6.0         0.820652                 27378                constant uniform row mass
+   HM11 attention     0      5.999999      6.000001  3.737017e-07               6.0         5.729902                 34866 constant row mass; not doubly stochastic
+    T11   uniform     0      6.000000      6.000000  0.000000e+00               6.0         0.930936                 27378                constant uniform row mass
+    T11 attention     0      5.999999      6.000001  3.585707e-07               6.0         5.467162                 34866 constant row mass; not doubly stochastic
+
+
+----- cell 31 -----
+section     model  seed  n_train_spots  n_heldout_spots  trainable_parameters  train_objective_per_spot  heldout_objective_per_spot  objective_gap
+   HM11   uniform     0           3136              785                 27378                 -0.242274                   -0.048469       0.193806
+   HM11 attention     0           3136              785                 34866                 -0.265062                   -0.062212       0.202850
+    T11   uniform     0           2214              554                 27378                 -0.202934                    0.611695       0.814630
+    T11 attention     0           2214              554                 34866                 -0.225054                    0.627260       0.852313
+
+
+----- cell 32 -----
+section                   model  observed_cross_mean  null_median  two_sided_p  negative_tail_p
+   HM11                 uniform             0.013072     0.021494     0.004498         0.001499
+   HM11               attention             0.013053     0.021937     0.006997         0.002999
+   HM11 attention_minus_uniform            -0.000019     0.000455     0.661169         0.330335
+    T11                 uniform             0.014756     0.021230     0.001499         0.000500
+    T11               attention             0.016595     0.022666     0.003498         0.001999
+    T11 attention_minus_uniform             0.001839     0.001467     0.374813         0.814593
+
+
+----- cell 33 -----
+
+Relaxing baseline for HM11
+
+Relaxing baseline for T11
+section niche  n_target_genes  n_source_spots  initial_factor  tumour_programme_delta  localisation_ratio_near_over_far  source_target_mean_original  source_target_mean_initial  source_target_mean_after_relaxation                                                    interpretation
+   HM11   CC8              15             646             0.0           -3.360552e-06                          0.964309                     0.106435                         0.0                             0.000013 model-predicted tumour support by the original fibrotic programme
+   HM11   CC4              12             587             0.0           -2.579263e-06                          0.947428                     0.121589                         0.0                             0.000013 model-predicted tumour support by the original fibrotic programme
+   HM11  CC11              17             130             0.0           -1.009086e-06                          0.974172                     0.117016                         0.0                             0.000007 model-predicted tumour support by the original fibrotic programme
+   HM11   CC9               6             133             0.0           -2.322604e-07                          1.197503                     0.122485                         0.0                             0.000008 model-predicted tumour support by the original fibrotic programme
+   HM11   CC6               5             255             0.0           -2.152915e-07                          1.211725                     0.126062                         0.0                             0.000012 model-predicted tumour support by the original fibrotic programme
+    T11   CC5              25             558             0.0           -1.862003e-05                          0.992507                     0.123171                         0.0                             0.000037 model-predicted tumour support by the original fibrotic programme
+    T11  CC11              25             712             0.0           -1.511451e-05                          0.947303                     0.102179                         0.0                             0.000024 model-predicted tumour support by the original fibrotic programme
+    T11   CC4              25              69             0.0           -2.804907e-06                          0.984215                     0.105782                         0.0                             0.000010 model-predicted tumour support by the original fibrotic programme
+    T11   CC8              25             817             0.0            1.471450e-05                          0.983074                     0.083399                         0.0                             0.000029                         model-predicted antagonistic relationship
+    T11  CC14              25             427             0.0            2.009979e-05                          0.992312                     0.087234                         0.0                             0.000034                         model-predicted antagonistic relationship
+
+
+----- cell 34 -----
+FINAL ONE-SEED STOCHASTIC-ATTENTION AUDIT
+section  seed  row_mass_std  column_mass_std  trainable_parameters  attention_cross_mean  attention_cross_two_sided_p  attention_cross_negative_tail_p  attention_minus_uniform_two_sided_p identifiability_extension                                        causal_claim
+   HM11     0  3.737017e-07         5.729902                 34866              0.013053                     0.006997                         0.002999                             0.661169           not established not established; one-seed model-based evidence only
+    T11     0  3.585707e-07         5.467162                 34866              0.016595                     0.003498                         0.001999                             0.374813           not established not established; one-seed model-based evidence only
+
+Required interpretation:
+1. The implemented row mass equals K, but the attention is not doubly stochastic.
+2. All query, key and coupling parameters are counted.
+3. The matched permutation test replaces the selected-pair binomial test.
+4. The perturbation is initial programme downscaling followed by relaxation.
+5. One seed cannot establish robustness or an extension of identifiability.
+
+
+----- cell 35 -----
+                      model                                                             HM11                                                              T11                                                                     conclusion
+     Signed sparse Celcomen                       cross mean -0.0102; seed correlation 0.022                      cross mean -0.0059; seed correlation -0.002 programme-level fitted relationship; gene-pair coefficients are seed-sensitive
+            GAT autoencoder                      held-out R2 -0.267; localisation ratio 0.98                      held-out R2 -0.381; localisation ratio 1.03             no positive held-out transfer or distinct local-attention response
+           Constrained GGAT held-out R2 -0.378; attention delta -0.000890; uniform -0.000960 held-out R2 -0.097; attention delta -0.001673; uniform -0.001651          no positive held-out transfer; attention response is close to uniform
+Constant-row-mass attention                              paired attention-vs-uniform p=0.661                              paired attention-vs-uniform p=0.375   no significant attention-uniform difference; identifiability not established
+

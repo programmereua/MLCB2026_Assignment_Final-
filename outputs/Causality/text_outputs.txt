@@ -1,0 +1,196 @@
+----- cell 01 -----
+Output directory: unified_causality_spatial
+Primary FCI: 100 spatial-block resamples, depth=2, up to 400 spots
+Depth sensitivity: 15 resamples, depth=3
+Expanded-panel sensitivity: 15 resamples, up to 12+12 genes
+
+
+----- cell 02 -----
+
+HM11
+  W: (117, 117); expression: (3921, 117); symmetric=True
+  stromal annotations: 26; tumour annotations: 29
+  annotation overlap: 0 genes
+  coordinates: handoff_to_eva/spot_annotations/HM11_spots.csv [spatial_x, spatial_y]
+  alignment: verified_against_h5ad (barcode; exact H5AD order confirmed)
+  technical covariates used when available: none
+  Celcomen contributes magnitude/sign only; no arrow is inferred
+
+T11
+  W: (117, 117); expression: (2768, 117); symmetric=True
+  stromal annotations: 101; tumour annotations: 34
+  annotation overlap: 18 genes
+  coordinates: handoff_to_eva/spot_annotations/T11_spots.csv [spatial_x, spatial_y]
+  alignment: verified_against_h5ad (barcode; exact H5AD order confirmed)
+  technical covariates used when available: none
+  Celcomen contributes magnitude/sign only; no arrow is inferred
+
+Spatial coordinate audit saved: spatial_coordinate_audit.csv
+
+
+----- cell 03 -----
+
+HM11: primary panel = 9 stromal + 9 tumour
+  primary targeted cross-pairs: 81
+  primary stromal: ['THBS1', 'TIMP1', 'BGN', 'ACTA2', 'COL1A1', 'COL3A1', 'TAGLN', 'SPARC', 'IGFBP7']
+  primary tumour:  ['KRT8', 'KRT18', 'EPCAM', 'ITGA3', 'GPRC5A', 'MUC1', 'S100A6', 'CLDN4', 'TSPAN8']
+  expanded panel = 12 stromal + 12 tumour
+
+T11: primary panel = 9 stromal + 9 tumour
+  primary targeted cross-pairs: 81
+  primary stromal: ['THBS1', 'TIMP1', 'BGN', 'ACTA2', 'COL1A1', 'COL3A1', 'TAGLN', 'SPARC', 'IGFBP7']
+  primary tumour:  ['KRT8', 'KRT18', 'EPCAM', 'ITGA3', 'GPRC5A', 'MUC1', 'S100A6', 'TSPAN8', 'LGALS4']
+  expanded panel = 12 stromal + 12 tumour
+
+Panel audit saved: FCI_gene_panel_audit.csv
+
+
+----- cell 04 -----
+
+HM11: 754 unique candidate pairs
+  unambiguous roles: 754
+  overlapping annotations: 0
+  exact targeted FCI cross-pairs: 81
+
+T11: 3263 unique candidate pairs
+  unambiguous roles: 3110
+  overlapping annotations: 153
+  exact targeted FCI cross-pairs: 81
+
+
+----- cell 05 -----
+Loaded compatible database cache: database_edges_v6.pkl
+
+HM11: curated support on 1 of 754 pairs
+  non-conflicting curated directions: 1
+  direction conflicts: 0
+
+T11: curated support on 4 of 3263 pairs
+  non-conflicting curated directions: 4
+  direction conflicts: 0
+
+
+----- cell 06 -----
+HM11: 100/100 successful spatial-block FCI resamples (depth=2, 18 genes, spatial residualisation; elapsed 997 s)
+T11: 100/100 successful spatial-block FCI resamples (depth=2, 18 genes, spatial residualisation; elapsed 308 s)
+Compatible section-specific caches were written to unified_causality_spatial.
+
+
+----- cell 07 -----
+Depth-3 sensitivity: HM11 15/15 successful; T11 15/15 successful.
+Expanded 12+12-gene panel: HM11 15/15 successful; T11 15/15 successful.
+All sensitivity analyses used spatial-block resampling and spatial residualisation.
+
+
+----- cell 08 -----
+
+HM11: 81 targeted cross-pairs evaluated
+  no edge in all primary resamples: 13
+  stable exact directions: 0
+  stable bidirected patterns: 0
+  same exact arrow at depth 3: 0
+  same exact arrow in expanded panel: 0
+
+T11: 81 targeted cross-pairs evaluated
+  no edge in all primary resamples: 3
+  stable exact directions: 0
+  stable bidirected patterns: 0
+  same exact arrow at depth 3: 0
+  same exact arrow in expanded panel: 0
+
+
+----- cell 09 -----
+No perturbo_data.json found; this layer will be marked unavailable
+
+
+----- cell 10 -----
+
+HM11: evidence table saved to FINAL_integrated_evidence_HM11.csv
+  top-decile threshold: 0.6858
+  weak_evidence                        678
+  undirected_functional_candidate      66
+  unstable_fci_signal                  10
+
+T11: evidence table saved to FINAL_integrated_evidence_T11.csv
+  top-decile threshold: 0.6855
+  weak_evidence                        2936
+  undirected_functional_candidate      316
+  unstable_fci_signal                  11
+
+
+----- cell 11 -----
+<Figure size 1400x1100 with 1 Axes>
+
+----- cell 11 -----
+HM11 figure saved: unified_causality_spatial/FINAL_evidence_network_HM11.png
+
+
+----- cell 11 -----
+<Figure size 1400x1100 with 1 Axes>
+
+----- cell 11 -----
+T11 figure saved: unified_causality_spatial/FINAL_evidence_network_T11.png
+
+
+----- cell 12 -----
+FINAL SPATIALLY AWARE CELCOMEN–FCI CAUSAL-HYPOTHESIS AUDIT
+
+HM11
+  Spatial alignment: verified against the original H5AD barcode order.
+  Expression spots: 3,921
+  Unique Celcomen candidate pairs: 754
+  Targeted FCI stromal–tumour pairs: 81
+  Primary spatial FCI: 100/100 successful, depth=2
+  Stable exact FCI arrows: 0
+  Stable bidirected patterns: 0
+  Exact arrows retained in depth-3 sensitivity: 0
+  Exact arrows retained in expanded-panel sensitivity: 0
+  OmniPath-supported candidate pairs: 1
+  KEGG-supported candidate pairs: 0
+
+  Evidence categories:
+    unstable FCI signals: 10
+    strong undirected functional candidates: 66
+
+  Strongest symmetric Celcomen relationships:
+    THBS1 — KRT8      -1.000
+    VIM — LCN2        +0.998
+    BGN — S100P       +0.997
+    COL1A1 — WFDC2    -0.935
+    IGFBP5 — PPDPF    -0.929
+
+T11
+  Spatial alignment: verified against the original H5AD barcode order.
+  Expression spots: 2,768
+  Unique Celcomen candidate pairs: 3,263
+  Targeted FCI stromal–tumour pairs: 81
+  Primary spatial FCI: 100/100 successful, depth=2
+  Stable exact FCI arrows: 0
+  Stable bidirected patterns: 0
+  Exact arrows retained in depth-3 sensitivity: 0
+  Exact arrows retained in expanded-panel sensitivity: 0
+  OmniPath-supported candidate pairs: 4
+  KEGG-supported candidate pairs: 0
+
+  Evidence categories:
+    unstable FCI signals: 11
+    strong undirected functional candidates: 316
+
+  Strongest symmetric Celcomen relationships:
+    MYRF — IFI27      -1.000
+    DCN — LGALS3BP    -1.000
+    CTSK — TSPAN8     +1.000
+    UBC — SERPINA1    +0.999
+    TIMP3 — TSPAN8    +0.998
+
+Interpretation
+  Strong model-derived relationships were identified, but no exact FCI direction
+  or bidirected pattern was sufficiently stable to support a reproducible causal
+  orientation. Curated arrows remain external priors. Target-specific perturbation
+  and independent biological replication are required for causal validation.
+
+Outputs
+  unified_causality_spatial/FINAL_analysis_summary.csv
+  unified_causality_spatial/FINAL_evidence_network_HM11.png
+  unified_causality_spatial/FINAL_evidence_network_T11.png
+
