@@ -1,0 +1,29 @@
+name: Mirror GitHub to GitLab
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Mirror repository to GitLab
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+
+        run: |
+          git clone --bare \
+            "https://github.com/${{ github.repository }}.git" \
+            repository.git
+
+          cd repository.git
+
+          git push --mirror \
+            "https://oauth2:${GITLAB_TOKEN}@gitlab.com/mlcb2026/MLCB2026_Assignment_Final.git"
