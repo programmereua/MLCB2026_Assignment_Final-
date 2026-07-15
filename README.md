@@ -1,278 +1,734 @@
 # MLCB2026_Assignment_Final
+
 # PerTurbo
 
-An agentic AI tool for in silico gene perturbation across diseases, powered by spatial transcriptomics, causal discovery, and a Fireworks LLM backend.
+**PerTurbo is an agentic AI platform for exploring in silico gene perturbations in spatial transcriptomics.**
 
+It connects spatial gene-expression analysis, Celcomen-based modelling, programme perturbation, exploratory causal discovery, gene-coupling networks, external biological evidence and an interactive natural-language interface.
 
+PerTurbo was developed using matched primary and metastatic pancreatic ductal adenocarcinoma tissue sections. The scientific analyses are performed offline, and their outputs are presented through an interactive dashboard and an agentic AI system.
 
-## The product
+PerTurbo is designed for:
 
-PerTurbo turns a spatial transcriptomics model into something a biologist can actually interrogate. You ask a question in plain language, for example what should I target in the liver metastasis, and the agent answers by ranking cell populations, pulling up the genes that drive them, mapping where the effect lands in the tissue, drawing the coupling network, and showing what public databases already know about each candidate. Every answer plays out as a short, narrated sequence, so a researcher watches the reasoning instead of reading a wall of text or a bare gene list.
+- biological exploration;
+- candidate-gene prioritisation;
+- programme-level perturbation analysis;
+- comparison of primary and metastatic tissue;
+- spatial visualisation;
+- network exploration;
+- causal-hypothesis generation;
+- external evidence retrieval.
 
-This is not a search engine over papers. It is a causal reasoning system built on real patient tissue, with a Fireworks LLM layer that explains what it found and why it matters.
+The outputs are model-derived hypotheses and require independent experimental validation.
 
-## Why we built it
+---
 
-Target discovery from spatial data usually stops at a static figure or a gene list, and two things bother us about that. First, a list does not tell you why a gene made the cut or how far to trust it. Second, most tools quietly present model output as if it were fact. PerTurbo tries to fix both. It explains each call with the evidence behind it, grounds the biology against real databases, and never once says proven target. Everything it shows is a prediction that still needs a wet lab.
+# Data
 
-## What you can do with it
+We used spatial gene-expression information from matched primary and metastatic pancreatic ductal adenocarcinoma tissue sections published by Khaliq et al. [7].
 
-A researcher can find targets in the primary tumour or the metastasis, returning ranked populations with a predicted tumour suppression effect, spot counts, and cross compartment flags. They can evaluate their own gene list by pasting candidates and getting a prioritise, consider, or deprioritise verdict against the model. They can compare primary versus metastasis to see how a population's signal shifts between the two sites. They can read the coupling network, an interactive node link graph of the gene to gene couplings with hubs, upstream genes, and per gene focus, and open the spatial maps showing the predicted knockout effect across the tissue. For any gene, they can pull external evidence and get a live dossier from Open Targets, DGIdb, Europe PMC, and ClinicalTrials.gov. And they can export a self contained report, either as an HTML file or a print ready PDF, covering every analysis in the session including the agent's own written conclusions.
+The samples were profiled using the **10x Genomics Visium spatial transcriptomics platform**.
 
-## Live demo
+Each Visium spot captures the pooled RNA expression of a small group of neighbouring cells while preserving the spatial location of that spot inside the tissue section.
 
-The interactive dashboard runs from a separate repository dedicated to the GitHub Pages deployment.
+The dataset contains:
 
-Try it live: https://plazanas.github.io/PerTurbo-Dashboard/
+- **T11**: a primary pancreatic ductal adenocarcinoma tissue section;
+- **HM11**: a matched metastatic tissue section from the same patient.
 
-Frontend source code: https://github.com/plazanas/PerTurbo-Dashboard
+The data are available through GEO accession:
 
-This repository holds the scientific backbone, the causal engine, the precompute pipeline, and the agent API the dashboard talks to.
+> **GSE272362**
 
-## How the pieces connect
+Because the sections originate from the same patient, they provide a matched primary-versus-metastasis comparison. They do not provide independent patient-level replication.
+
+---
+
+# Extension of Celcomen
+
+We used Celcomen as the main modelling framework and extended the analytical workflow to include:
+
+- signed gene-to-gene couplings;
+- sparse coupling matrices;
+- fibrotic- and tumour-programme definitions;
+- programme-level initial-state downscaling;
+- model relaxation after perturbation;
+- spatial-response analysis;
+- seed and control analyses;
+- graph-attention model extensions;
+- constant-row-mass attention;
+- undirected network visualisation;
+- exploratory causal-discovery analysis;
+- comparison with external pathway information;
+- integration with the PerTurbo agentic application.
+
+The Celcomen coupling matrix is symmetric. Therefore, its gene-to-gene relationships are presented as **undirected fitted couplings** and not as data-derived causal arrows.
+
+---
+
+# Scientific notebooks
+
+The repository contains four scientific notebooks.
+
+Each notebook performs a different part of the analysis.
+
+---
+
+## `validation_Experiments.ipynb`
+
+This notebook performs the main programme-perturbation and validation analysis.
+
+It includes:
+
+- loading the matched HM11 and T11 tissue sections;
+- fitting signed and sparse Celcomen coupling models;
+- defining fibrotic and tumour-related gene programmes;
+- selecting programme genes for perturbation;
+- reducing selected genes in the initial model state;
+- allowing expression to relax under the fitted model;
+- measuring the resulting tumour-programme response;
+- comparing selected programmes with matched random gene sets;
+- examining sensitivity across model seeds;
+- evaluating spatial localisation;
+- performing graph-shuffling controls;
+- examining random-niche controls;
+- evaluating combined programme responses;
+- identifying limitations in the available controls.
+
+The perturbation is performed by changing the **initial model state**.
+
+The genes are allowed to change again during relaxation.
+
+The procedure is therefore described as:
+
+> **Initial programme downscaling followed by model relaxation**
+
+It is not a permanent biological gene knockout.
+
+The purpose of this notebook is to perform the biological programme analysis and provide the controls required for its interpretation.
+
+---
+
+## `Methodology_Extensions.ipynb`
+
+This notebook develops and evaluates methodological extensions of the Celcomen workflow.
+
+It contains four models.
+
+### Model 1: signed sparse Celcomen
+
+This model estimates a symmetric signed and sparse gene-to-gene coupling matrix.
+
+It is used to examine:
+
+- coupling density;
+- programme-level coupling;
+- sparsity;
+- seed sensitivity;
+- programme responses after initial-state downscaling.
+
+### Model 2: graph-attention autoencoder
+
+This model uses graph attention to reconstruct spatial expression.
+
+It is used to examine:
+
+- sender-to-receiver spatial aggregation;
+- expression reconstruction;
+- attention weights;
+- spatial localisation;
+- transfer to a held-out spatial region.
+
+### Model 3: constrained fibrotic-to-tumour GGAT
+
+This model uses fibrotic-programme expression as the predictor and tumour-programme expression as the target.
+
+It is used to examine:
+
+- fibrotic-sender to tumour-receiver relationships;
+- attention-weighted programme responses;
+- comparison with uniform aggregation;
+- transfer to a held-out spatial region.
+
+### Model 4: constant-row-mass attention
+
+This model compares learned attention with uniform neighbour aggregation.
+
+Each receiving spot has the same total incoming neighbour mass.
+
+It is used to examine:
+
+- receiver-row mass;
+- graph implementation;
+- uniform-versus-attention aggregation;
+- trainable parameter counts;
+- spatial hold-out behaviour;
+- matched programme permutation tests;
+- attention-based programme responses.
+
+The purpose of this notebook is to evaluate whether attention-based extensions provide useful spatial information beyond the Celcomen baseline.
+
+The notebook evaluates the implementation and model behaviour. It does not claim that learned attention automatically preserves the original Celcomen identifiability result.
+
+---
+
+## `HM11_Undirected_Network.ipynb`
+
+This notebook creates the main gene-coupling network for the HM11 metastatic tissue section.
+
+It includes:
+
+- loading the fitted HM11 gene-to-gene coupling matrix;
+- checking that the matrix is sufficiently symmetric;
+- removing negligible numerical asymmetry;
+- ranking gene pairs by coupling magnitude;
+- selecting the strongest fitted relationships;
+- separating positive and negative couplings;
+- building an undirected gene network;
+- annotating genes by niche or biological programme;
+- exporting the network figure;
+- exporting the network edge table.
+
+The network is presented as:
+
+> **Undirected signed Celcomen coupling network**
+
+The figure uses lines rather than arrows.
+
+The network visualises fitted relationships without assigning causal direction.
+
+Positive and negative values refer to the sign of the fitted coupling. They do not independently establish biological activation, inhibition or causation.
+
+---
+
+## `Causality.ipynb`
+
+This notebook performs an exploratory causal-discovery analysis using the observed spatial-expression data.
+
+It includes:
+
+- selecting stromal- and tumour-programme genes;
+- adjusting for measured spatial and technical covariates;
+- transforming the data for conditional-independence testing;
+- applying the Fast Causal Inference algorithm;
+- repeating the analysis across spatial-block resamples;
+- evaluating graph stability;
+- examining directed patterns;
+- examining undirected patterns;
+- examining circular endpoint patterns;
+- examining bidirected patterns compatible with latent confounding;
+- performing sensitivity analyses;
+- comparing observational patterns with OmniPath and KEGG information.
+
+The purpose of this notebook is to examine whether the observational spatial-expression data support stable orientations between programme genes.
+
+FCI examines possible latent confounding at the level of individual gene pairs.
+
+It does not identify the biological identity of an unmeasured common factor.
+
+Directions from OmniPath and KEGG are treated as:
+
+> **External curated biological priors**
+
+They are not presented as causal directions learned directly from the Celcomen matrix or from the HM11 and T11 expression data.
+
+---
+
+# Notebook workflow
+
+The notebooks can be followed in the following order:
+
+1. `validation_Experiments.ipynb`  
+   Programme perturbation and validation controls.
+
+2. `Methodology_Extensions.ipynb`  
+   Celcomen and graph-attention methodology extensions.
+
+3. `HM11_Undirected_Network.ipynb`  
+   Visualisation of the main undirected Celcomen network.
+
+4. `Causality.ipynb`  
+   Exploratory causal-discovery and orientation-stability analysis.
+
+This workflow moves from programme perturbation, to methodological evaluation, to network visualisation, and finally to exploratory causal discovery.
+
+---
+
+# PerTurbo application
+
+PerTurbo is the interactive application developed on top of the scientific analyses.
+
+The notebooks perform the computationally expensive model fitting, perturbation experiments, validation analyses and causal-discovery procedures.
+
+Their outputs are converted into structured files containing:
+
+- candidate-gene information;
+- biological population information;
+- programme perturbation results;
+- spatial-response values;
+- network relationships;
+- model and validation metadata;
+- causal-discovery annotations;
+- external biological evidence.
+
+The PerTurbo application reads these precomputed outputs and allows a researcher to explore them interactively.
+
+The models do not need to be retrained every time a user asks a question.
+
+---
+
+# Agentic AI system
+
+PerTurbo includes an **agentic AI layer**.
+
+The agent receives a user question in natural language and selects the appropriate tools, data and visualisations required to answer it.
+
+For example, a researcher may ask:
+
+> Which biological population should be prioritised in the metastatic section?
+
+The agent can then:
+
+1. identify that the question refers to HM11;
+2. retrieve the relevant precomputed population rankings;
+3. inspect the corresponding programme genes;
+4. retrieve the predicted model response;
+5. request the relevant spatial map;
+6. retrieve the coupling-network neighbourhood;
+7. request external evidence for selected genes;
+8. organise the information into a structured explanation;
+9. guide the dashboard through the relevant visualisations;
+10. state the limitations of the result.
+
+This creates a multi-step analytical workflow rather than a single text response.
+
+The agent is used to coordinate and explain the available evidence.
+
+It does not independently calculate the scientific measurements.
+
+The numerical results are generated by the notebooks and precomputation pipeline.
+
+---
+
+# Language-model backend
+
+The PerTurbo agent uses an OpenAI-compatible language-model interface through the **Fireworks AI API**.
+
+The language-model layer is used to:
+
+- understand natural-language questions;
+- select the correct analysis tools;
+- organise precomputed results;
+- explain gene and programme information;
+- generate a narrated analysis sequence;
+- compare sections;
+- present external evidence;
+- describe uncertainty;
+- state methodological limitations.
+
+The language model is not the source of the scientific measurements.
+
+It receives structured scientific outputs and converts them into an accessible explanation.
+
+The structured application endpoints can continue to serve scientific data even when the language-model service is unavailable.
+
+---
+
+# Main PerTurbo functions
+
+## Target and population discovery
+
+PerTurbo allows the user to explore candidate genes and biological populations in either tissue section.
+
+The interface can display:
+
+- section;
+- biological population;
+- number of source spots;
+- programme genes;
+- predicted tumour-programme response;
+- spatial information;
+- model evidence;
+- validation information;
+- external evidence.
+
+The results represent in silico prioritisation and not clinically validated targets.
+
+---
+
+## Candidate-gene evaluation
+
+A researcher can provide a list of genes.
+
+PerTurbo can compare the submitted genes with the available scientific evidence and organise them into categories such as:
+
+- prioritise;
+- consider;
+- deprioritise;
+- insufficient evidence.
+
+Each candidate can be accompanied by information from:
+
+- programme perturbation;
+- coupling relationships;
+- causal-discovery analysis;
+- spatial maps;
+- literature;
+- drug-gene databases;
+- clinical-trial databases.
+
+---
+
+## Primary-versus-metastasis comparison
+
+PerTurbo can compare the same gene or biological population between:
+
+- **T11 primary tumour**;
+- **HM11 metastasis**.
+
+The comparison can show:
+
+- whether a candidate appears in both sections;
+- whether its fitted response differs between sections;
+- whether the source population differs;
+- whether the spatial distribution differs;
+- whether external evidence is available.
+
+Because both sections originate from the same patient, this is a matched tissue comparison and not independent patient-level validation.
+
+---
+
+## Spatial maps
+
+PerTurbo displays spatial maps of model-derived responses.
+
+The maps allow the user to examine:
+
+- the selected source population;
+- the location of tumour-related spots;
+- the magnitude of the predicted response;
+- the distribution of the response across the tissue;
+- whether the response appears local or tissue-wide.
+
+The maps display model predictions and not experimentally measured treatment responses.
+
+---
+
+## Coupling network
+
+PerTurbo displays the signed Celcomen relationships as an interactive network.
+
+The main data-derived network is undirected.
+
+The user can:
+
+- inspect positive fitted couplings;
+- inspect negative fitted couplings;
+- focus on a selected gene;
+- display neighbouring genes;
+- identify highly connected genes;
+- filter the network;
+- distinguish fitted Celcomen relationships from external pathway information.
+
+Directed pathway relationships, when displayed, are clearly labelled as external curated information.
+
+---
+
+## Exploratory causal information
+
+PerTurbo can display information from the exploratory FCI analysis.
+
+This may include:
+
+- undirected relationships;
+- possible directed orientations;
+- possible latent-confounding patterns;
+- stability across spatial resamples;
+- sensitivity-analysis information;
+- comparison with external pathway priors.
+
+The causal-discovery information is presented as hypothesis-supporting evidence.
+
+It is not presented as experimentally established gene-to-gene causation.
+
+---
+
+## External biological evidence
+
+PerTurbo can retrieve information from external databases such as:
+
+- Open Targets;
+- DGIdb;
+- Europe PMC;
+- ClinicalTrials.gov;
+- OmniPath;
+- KEGG.
+
+The evidence layer can provide:
+
+- disease associations;
+- known drug-gene interactions;
+- relevant publications;
+- registered clinical studies;
+- known pathway relationships;
+- therapeutic-development context.
+
+An external record does not independently validate a model prediction.
+
+It provides additional biological and clinical context.
+
+---
+
+## Agent-guided presentation
+
+The agent can create a sequence of dashboard actions.
+
+A response may include:
+
+1. an explanation of the selected tissue section;
+2. a ranked population view;
+3. a candidate-gene table;
+4. a spatial map;
+5. a network view;
+6. external evidence;
+7. a comparison between primary and metastatic tissue;
+8. a summary of limitations.
+
+The user therefore receives both a written explanation and an interactive analytical sequence.
+
+---
+
+## Report generation
+
+PerTurbo can generate a structured report containing:
+
+- the research question;
+- selected tissue section;
+- ranked populations;
+- candidate genes;
+- programme-response information;
+- spatial maps;
+- coupling-network information;
+- exploratory causal evidence;
+- external evidence;
+- the agent's interpretation;
+- methodological limitations;
+- provenance of the displayed results.
+
+The report can be exported for browser viewing, printing or PDF generation.
+
+---
+
+# How the components connect
 
 ```mermaid
 flowchart LR
-  D[("Spatial transcriptomics data<br/>Visium sections T11 - HM11")] --> C
-  C["Celcomen<br/>signed and sparse gene-gene coupling"] --> S
-  S["Simcomen<br/>counterfactual knockout"] --> E["Effect scores<br/>per gene, per population"]
-  C --> F
-  F["Causal direction engine<br/>bootstrap FCI plus FDR"] --> V
-  P[("OmniPath and KEGG<br/>pathway priors")] --> V
-  V["Confidence graded verdict<br/>high, medium, or low"] --> A
-  E --> A
-  A["Flask agent API<br/>kimi-k2 via Fireworks, run on AMD Developer Cloud"] --> UI["Dashboard<br/>GitHub Pages"]
+    A["HM11 and T11 spatial transcriptomics"] --> B["Offline scientific notebooks"]
+
+    B --> C["Signed sparse Celcomen"]
+    B --> D["Programme downscaling and relaxation"]
+    B --> E["Validation and control analyses"]
+    B --> F["Attention methodology extensions"]
+    B --> G["Exploratory FCI analysis"]
+
+    C --> H["Undirected coupling network"]
+    D --> I["Programme and candidate tables"]
+    E --> J["Validation metadata"]
+    F --> K["Methodology outputs"]
+    G --> L["Orientation and latent-confounding annotations"]
+
+    M["OmniPath, KEGG and external databases"] --> N["External evidence"]
+
+    H --> O["Precomputed PerTurbo artifacts"]
+    I --> O
+    J --> O
+    K --> O
+    L --> O
+
+    O --> P["PerTurbo API"]
+    N --> P
+
+    P --> Q["Agentic AI layer"]
+    Q --> R["Interactive dashboard"]
+    P --> R
+
+    R --> S["Maps, networks, comparisons and reports"]
 ```
 
-The precompute pipeline trains the coupling model and runs the counterfactual knockouts and the causal direction engine offline, writing compact artifacts. The agent API serves those artifacts and wraps them in the LLM layer. The agent itself, its choreography of the dashboard, and the live interface are in the frontend repository linked above.
+---
 
-## Repository structure
+# Scientific and application separation
 
-The repository separates the offline science from the runtime product. This split is also the licensing boundary (see the Celcomen licence section below).
+The project separates the scientific computations from the runtime application.
 
-```
-agent/                  The runtime product. Contains NO Celcomen code — MIT-licensed.
-  perturbo_agent_api.py          Flask API: brain + LLM tool loop + presentation-script builder
-  gene_knowledge.py              live external-evidence lookup (stdlib only)
-  requirements.txt               flask, openai
-backend_precompute/     Offline pipeline that generates the artifacts the agent serves. Uses Celcomen (GPL-3.0).
-  perturbo_precompute_fast.py    ranks populations, drills gene targets, saves spatial maps
-  perturbo_network_export.py     exports the coupling networks (undirected couplings + directed priors)
-experiments_validation/ Validated scientific analysis (Jupyter / Colab) + the causal engine. Uses Celcomen (GPL-3.0).
-  Celcomen_Experiments_and_Validation.ipynb
-  Celcomen_Methodology_Models.ipynb
-  causal_directions.py           causal direction engine (bootstrap FCI + FDR + OmniPath/KEGG priors)
-LICENSE
+## Offline scientific layer
+
+The notebooks and precomputation workflow perform:
+
+- data preprocessing;
+- model fitting;
+- programme perturbation;
+- relaxation experiments;
+- validation analyses;
+- graph-attention experiments;
+- network generation;
+- causal-discovery analysis.
+
+These analyses generate structured output files.
+
+## Runtime application layer
+
+The PerTurbo application reads the saved output files.
+
+It provides:
+
+- fast API responses;
+- interactive visualisation;
+- natural-language interaction;
+- external evidence retrieval;
+- report generation.
+
+This separation allows the scientific analyses to be inspected independently from the language-model interface.
+
+---
+
+# Live demo
+
+The interactive dashboard is available at:
+
+https://plazanas.github.io/PerTurbo-Dashboard/
+
+Frontend source code:
+
+https://github.com/plazanas/PerTurbo-Dashboard
+
+The dashboard repository contains the interactive user interface and presentation logic.
+
+This repository contains the scientific notebooks and analytical foundation.
+
+---
+
+# Repository contents
+
+```text
+Causality.ipynb
+    Exploratory causal-discovery analysis using FCI, spatial resampling
+    and external pathway information.
+
+HM11_Undirected_Network.ipynb
+    Undirected signed Celcomen coupling network for the HM11 metastatic
+    tissue section.
+
+Methodology_Extensions.ipynb
+    Signed sparse Celcomen baseline and graph-attention methodology
+    extensions.
+
+validation_Experiments.ipynb
+    Programme perturbation experiments, spatial analyses and validation
+    controls.
+
 README.md
+    Description of the data, scientific notebooks and PerTurbo
+    application.
 ```
 
-The `agent/` server imports no Celcomen code; it reads the JSON artifacts and serves them. The
-`backend_precompute/` pipeline and the notebooks in `experiments_validation/` use Celcomen as an installed
-dependency to produce those artifacts.
+---
 
-## Running it
+# Technology
 
-### 1. The agent API (runtime, MIT, Celcomen-free)
+## Scientific analysis
 
-```bash
-cd agent
-pip install -r requirements.txt
-export PERTURBO_LLM_API_KEY=...            # your Fireworks key (or any OpenAI-compatible endpoint)
-export PERTURBO_LLM_BASE_URL=https://api.fireworks.ai/inference/v1
-export PERTURBO_LLM_MODEL=accounts/fireworks/models/kimi-k2p6
-export PERTURBO_DATA=perturbo_data.json    # path to the precomputed artifact (see step 2)
-python perturbo_agent_api.py --port 8000
-```
+- Python;
+- Jupyter Notebook;
+- Google Colab;
+- Celcomen;
+- Scanpy;
+- AnnData;
+- NumPy;
+- pandas;
+- SciPy;
+- PyTorch;
+- PyTorch Geometric;
+- causal-learn;
+- statsmodels;
+- NetworkX;
+- Matplotlib.
 
-The server binds `0.0.0.0:8000` and starts immediately, because it reads precomputed artifacts rather than
-training anything. Without an LLM key, the data endpoints still work and `/chat` returns a graceful message.
-To serve the dashboard from the same origin (avoiding CORS entirely), add `--static /path/to/dashboard`.
+## Application
 
-**Endpoints** (CORS enabled, OPTIONS preflight answered, `/chat` never crashes):
+- Flask API;
+- OpenAI-compatible Fireworks API;
+- agentic language-model workflow;
+- JavaScript dashboard;
+- Chart.js;
+- HTML report export;
+- PDF report export.
 
-| Method | Endpoint | Purpose |
-|---|---|---|
-| GET  | `/health` | `{ ok, has_llm, sections }` |
-| GET  | `/sections` | available samples |
-| GET  | `/network` | coupling networks JSON |
-| GET  | `/map?section=&population=` | spatial-effect PNG |
-| POST | `/discover` | `{ section, n }` → ranked targets |
-| POST | `/evaluate` | `{ genes, section }` → prioritise / consider / deprioritise |
-| POST | `/chat` | `{ message, history }` → `{ reply, script, history }` |
-| POST | `/knowledge` | `{ gene, disease }` → grounded external-evidence dossier |
+## External evidence sources
 
-### 2. The precompute (offline, requires the Celcomen/GPL environment + spatial data)
+- Open Targets;
+- DGIdb;
+- Europe PMC;
+- ClinicalTrials.gov;
+- OmniPath;
+- KEGG.
 
-```bash
-cd backend_precompute
-pip install -r requirements.txt
-python perturbo_precompute_fast.py --steps 80      # ranked targets + spatial maps (one-time, heavy)
-python perturbo_network_export.py --from-model     # coupling networks + sign concordance
-```
+---
 
-This writes `perturbo_data.json`, `network.json`, and the spatial-effect PNGs; point the agent at them with
-`PERTURBO_DATA` (and place the PNGs where the agent's `/map` endpoint can find them).
+# Responsible interpretation
 
-### 3. The notebooks (reproduce the science)
+PerTurbo is designed for hypothesis generation and candidate prioritisation.
 
-The three scripts, in the order you run them
+The application should describe results using terms such as:
 
-1.perturbo_causality.py — interventional evidence (Simcomen)
+- model-derived response;
+- fitted coupling;
+- in silico candidate;
+- exploratory causal hypothesis;
+- external curated direction;
+- requires experimental validation.
 
-What it does: trains a Celcomen coupling model on each tissue section, then actually
-knocks out each driver gene inside each Cell Community (CC) — setting its expression to zero,
-letting the model relax, and reading how much the tumour-gene readout moves. This is repeated for
-every driver gene individually and for each CC as a group, then checked against a permutation null
-(random gene knockouts) with FDR correction, so every effect comes with a p-value and q-value.
+The application should not describe results as:
 
-Why this method: it is a real intervention (do(gene = 0)), not a correlation. It answers
-"if I silence this gene, what happens to the tumour?" — the actual causal question a
-wet-lab experiment would ask, simulated on the trained model.
+- a proven therapeutic target;
+- an experimentally confirmed causal gene;
+- a validated clinical treatment;
+- a causal direction established by Celcomen alone.
 
-What it can get wrong: everything it says is only as good as the trained coupling W. If the
-model learned the wrong structure, or the true signal is confounded, Simcomen has no way to know
-— it trusts the model completely and reports the model's prediction as fact.
+The term causal in this project refers to the combination of:
 
-Run it:
+1. model-based programme perturbation;
+2. observational causal-discovery analysis;
+3. stability and control analyses;
+4. external pathway evidence;
+5. transparent hypothesis prioritisation.
 
-python 1.perturbo_causality.py
+It does not mean that biological causality has been independently demonstrated.
 
-Writes perturbo_out/perturbo_data.json. Slow (trains a model + hundreds of knockouts per
-section), but resumable — it saves after each section and skips ones already done if you rerun it.
+---
 
+# Celcomen and licensing
 
-2.fci_causal_discovery.py — observational evidence (FCI)
+The modelling workflow uses Celcomen as an installed scientific dependency.
 
-What it does: takes the raw expression data — no trained model, no intervention — and asks,
-for every stroma–tumour gene pair, whether their association survives after statistically
-controlling for every other gene in the panel. If the association disappears once you account for
-a third gene, that third gene likely explains it (a shared cause). If it survives no matter what
-you control for, FCI treats it as a real, directed edge. This is bootstrapped (15 resamples) so
-every verdict — directed edge, shared latent factor, or undetermined — comes with a stability
-score, and it's cross-checked with a second, non-linear test (RCIT) since the expression data is
-skewed.
+Celcomen is distributed under the GPL-3.0 licence.
 
-Why this method: it does not trust the trained model at all. It starts from scratch, from the
-data itself, so it can catch cases where Simcomen's prediction is actually driven by a hidden
-confounder (like the tumour niche) rather than a real gene-to-gene effect — something Simcomen has
-no way to detect on its own.
+The scientific notebooks and offline components that depend on Celcomen should be used in an environment compatible with the Celcomen licence.
 
-What it can get wrong: needs enough samples and a clean enough signal to detect an effect;
-at Visium spot resolution (many cells per spot), a real but modest effect can fail to reach
-significance even when it's genuine.
+The runtime agent and dashboard read precomputed output files and do not need to retrain Celcomen during user interaction.
 
-Run it:
+Celcomen is credited as the underlying spatial modelling framework used in this project.
 
-python 2.fci_causal_discovery.py
+---
 
-Writes causal_results/causal_directions_HM11.csv and _T11.csv. The first several bootstrap
-runs are slow while the worker pool warms up (normal, not a bug) — the script does not need to be
-stopped or restarted for this.
+# Team and affiliation
 
+This project was developed by:
 
-3.merge_causality_evidence.py — combining the two, honestly
+- **Evangelia Kourtzelli**
+- **Ioulios Konstantelos**
+- **Panagiotis Lazanas**
 
-What it does: reads both output files and, for every gene Simcomen tested, looks up what FCI
-independently found for that gene. It never averages the two into one score. Instead it labels
-each gene with a provenance-tagged status:
-
-statusmeaningcorroboratedSimcomen KO is significant and FCI finds a stable directed edge — the strongest possible callsimcomen_onlyModel predicts an effect, but FCI can't confirm it observationally (common at spot resolution)flag_latentFCI says this pair is explained by a shared hidden factor (the niche) — treat the Simcomen prediction with cautionfci_onlyFCI finds a directed edge, but the Simcomen knockout wasn't significantweakneither method is confidentfci_not_evaluatedgene is outside the FCI gene panel
-
-Why we do this at all: The two methods fail in different ways (one trusts the model
-completely, the other needs a clean statistical signal), so when they agree, that agreement is
-real evidence — not the same mistake made twice. When they disagree, the disagreement itself is
-useful: it tells you exactly which "significant" model predictions should not be taken at face
-value.
-
-Run it:
-
-python 3.merge_causality_evidence.py
-
-Writes perturbo_out/perturbo_merged.json (what the app/agent should read) and
-perturbo_out/merged_evidence.csv (a flat audit table, sorted so corroborated hits are on top).
-
-
-Run order
-
-python 1.perturbo_causality.py        # interventional: train + knock out every driver gene
-python 2.fci_causal_discovery.py      # observational: independent check from raw data
-python 3.merge_causality_evidence.py  # combine both, with honest provenance labels
-
-Steps 1 and 2 are independent of each other and could in principle run in parallel — step 3 needs
-the output of both.
-
-The two notebooks
-
-experiments_validation.ipynb — the main biological analysis and validation battery:
-trains the identifiable signed-sparse Celcomen model, runs the knockout experiments, and stress
-tests every design choice (permutation nulls, seed stability, control audits) against what could
-go wrong. This is where the honest, section-by-section reasoning behind the biology lives.
-
-
-Celcomen_Methodology_Models.ipynb — characterises the models themselves: capacity,
-generalisation, and whether the attention-based extensions (GAT, GGAT, doubly-stochastic
-attention) preserve the identifiability guarantee that makes the whole pipeline trustworthy.
-Uses leakage-free spatial validation splits so the reported metrics are real, not optimistic.
-
-
-These are the scientific backbone; the three numbered scripts are the productionised pipeline
-built on top of them.
-
-## Not only for one disease, a rich, swappable environment
-
-We built and validated PerTurbo on two matched pancreatic ductal adenocarcinoma sections, one primary tumour and one metastatic sample, because that is the disease context we work in and had matched data for. But PerTurbo is not PDAC specific, and this is central to the product, not a footnote.
-
-The underlying environment is deliberately generic, it consumes a spatial transcriptomics object and a driver gene table, and everything downstream, the causal coupling model, the counterfactual perturbation, the bootstrap calibrated direction calls, the clinical trial lookup, operates on whatever tissue compartments and gene panel are provided.
-
-That means PerTurbo can be pointed at any cancer with a spatial transcriptomics dataset and a meaningful compartment boundary, non cancer diseases with spatially structured tissue pathology such as fibrosis or inflammatory bowel disease, and multiple platforms including Visium and Xenium.
-
-## How PerTurbo finds causality
-
-The foundation is an identifiable gene to gene coupling learned by a Celcomen style graph model, kept identifiable by holding the incoming neighbour weight constant. The coupling is undirected on its own, so PerTurbo layers a causal discovery pipeline on top, FCI resampled across bootstraps to report a stability fraction and to distinguish a real directed arrow from a shared latent factor, Benjamini Hochberg FDR correction, effect size alongside significance, and OmniPath and KEGG as literature priors. A gene pair is only called high confidence when several of these independent axes agree.
-
-## Honest by design
-
-This is the part we care about most, and it sits in the interface itself, not buried in a footnote. Every model output is labelled as a predicted, causal given model hypothesis, a prioritised in silico candidate, never a proven target. Celcomen is a symmetric model, so its couplings are undirected associations, and any directional arrow shown is overlaid from literature priors rather than learned from the data itself. The network's sign concordance against those literature priors runs close to chance, and we report that plainly rather than dressing it up as validation. External database records are shown exactly as returned, and a drug or trial appearing next to a gene does not by itself mean it works against that target.
-
-## Honest limits from our own validation
-
-The signed stroma to tumour cross block is consistently negative and reproducible in direction across seeds, but it does not yet separate from a permutation null at Visium spot resolution, and the effect behaves as tissue wide rather than sharply local. This is consistent with multi cell averaging inside each spot washing out a genuine local niche signal, and it is not a failure of the model so much as the ceiling of what spot level data can show. Single cell spatial resolution such as Xenium is the natural next step, and is discussed in the notebooks.
-
-## Tech stack
-
-The model is Celcomen, extended in this repository for signed and sparse gene to gene couplings over matched 10x Visium sections. The agent is a Flask API orchestrating kimi-k2 through the Fireworks API, and the full agent was run inside the AMD Developer Cloud notebook environment; self hosting the model on AMD Instinct MI300X via vLLM is a supported deployment path. The frontend is a static site in vanilla JavaScript with Chart.js for charts and html2canvas for image export, with no build step. External evidence is pulled live from Open Targets, DGIdb, Europe PMC, and ClinicalTrials.gov.
-
-## Data and method
-
-The data is one PDAC patient, a primary tumour labelled T11 and a liver metastasis labelled HM11, from GEO accession GSE272362, Khaliq et al. The underlying method is described in Megas et al., Celcomen, spatial causal disentanglement for single cell and tissue perturbation modeling, Nature Communications, 2026, preprint at arXiv 2409.05804.
-
-## Celcomen: what we used, and its licence
-
-PerTurbo's causal engine is built directly on Celcomen (Megas, Chen, Polanski, Asadollahzadeh, Eliasof, Schönlieb, Teichmann, Wellcome Sanger Institute and University of Cambridge), published in Nature Communications. We use both its inference module, CCE, to learn the signed gene gene coupling, and its generative counterfactual module, SCE or Simcomen, to simulate perturbations.
-
-Celcomen is distributed under the GPL-3.0 licence. We use it as intended, as an installed dependency, not by copying or modifying its source into this repository, and we credit it explicitly here and in every notebook. The `backend_precompute/` pipeline and the notebooks in `experiments_validation/` depend on Celcomen and therefore run in a GPL environment. The `agent/` server contains no Celcomen code (verified: no Celcomen import anywhere under `agent/`) and, together with the code in this repository that does not derive from Celcomen, is released under the MIT License, matching the frontend repository; see LICENSE.
-
-## Environment
-
-```
-Python 3.11
-
-# agent/ (runtime, MIT) — no Celcomen
-flask, openai
-
-# backend_precompute/ and experiments_validation/ — use Celcomen (GPL-3.0)
-celcomen, simcomen (Teichmann lab, GPL-3.0)
-scanpy, anndata, torch, torch-geometric
-causal-learn, statsmodels, omnipath
-
-# LLM
-Fireworks AI API
-```
-
-## Team
-
-Evangelia Kourtzelli, Ioulios Konstantelos, Panagiotis Lazanas.
-
-MSc Data Science and Information Technologies
-National and Kapodistrian University of Athens
+**MSc Data Science and Information Technologies**  
+**National and Kapodistrian University of Athens**
 
